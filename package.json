@@ -1,0 +1,26 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject"
+  },
+  "dependencies": {
+    "moment": "^2.22.2",
+    "react-native-credit-card-input": "^0.4.1",
+    "react-native-image-picker": "^0.27.2",
+    "react-native-maps": "^0.22.0",
+    "react-native-snap-carousel": "^3.7.5",
+    "react-native-tab-view": "^1.2.0",
+    "react-native-vector-icons": "^6.0.2",
+    "react-navigation": "^2.18.2",
+    "expo": "^32.0.0",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz"
+  },
+  "devDependencies": {
+    "babel-preset-expo": "^5.0.0"
+  },
+  "private": true
+}
