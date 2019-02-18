@@ -11,46 +11,78 @@ import { LinearGradient } from 'expo'
 const WINDOW_WIDTH = Dimensions.get('window').width
 export default class Category extends Component {
 
-    _onPress = () => {
-        if (this.props.onPress) {
-            this.props.onPress(this.props.data)
-        }
+  _onPress = () => {
+    if (this.props.onPress) {
+      this.props.onPress(this.props.data)
     }
+  }
 
-    render() {
-        const imageSource = this.props.thumbnail ? {uri: this.props.thumbnail} : null
-        return (
-            <TouchableOpacity style={this.props.style} activeOpacity={0.7} onPress={this._onPress}>
-                <View style={{
-                    height: 160,
-                    width: (WINDOW_WIDTH - 16 * 3) / 2,
-                    borderRadius: 8,
-                    backgroundColor: 'black'
-                }}>
-                    <Image style={{
-                        height: 160,
-                        width: (WINDOW_WIDTH - 16 * 3) / 2,
-                        borderRadius: 8
-                        }} source={imageSource} />
-                    <LinearGradient style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        borderBottomLeftRadius: 8,
-                        borderBottomRightRadius: 8,
-                        width: '100%',
-                        height: 50
-                    }} colors={['#00000000', '#000']}>
-                        <Text style={{
-                            color: 'white',
-                            fontSize: 13,
-                            position: 'absolute',
-                            bottom: 0,
-                            marginLeft: 8,
-                            marginBottom: 8
-                        }}>{this.props.name}</Text>
-                    </LinearGradient>
-                </View>
-            </TouchableOpacity>
-        )
+  render() {
+    var imageSource = null
+    var backgroundColor = null
+
+    switch (this.props.name) {
+      case "Hotel": {
+        imageSource = require('../res/images/ic_hotel.png')
+        backgroundColor = "#ba5494"
+        break
+      }
+      case "Food & Beverage": {
+        imageSource = require('../res/images/ic_food.png')
+        backgroundColor = "#ed6d34"
+        break
+      }
+      case "Local Event": {
+        imageSource = require('../res/images/ic_event.png')
+        backgroundColor = "#f3b244"
+        break
+      }
+      case "Service": {
+        imageSource = require('../res/images/ic_service.png')
+        backgroundColor = "#717f78"
+        break
+      }
+      case "Shop": {
+        imageSource = require('../res/images/ic_shopping.png')
+        backgroundColor = "#384b62"
+        break
+      }
+      case "Tour": {
+        imageSource = require('../res/images/ic_tour.png')
+        backgroundColor = "#4286f4"
+        break
+      }
+      default: {
+        imageSource = this.props.thumbnail ? {uri: this.props.thumbnail} : null
+      }
     }
+    
+    const size = (WINDOW_WIDTH - 16 * 3) / 2
+    return (
+      <TouchableOpacity style={this.props.style} activeOpacity={0.7} onPress={this._onPress}>
+        <View style={{
+            width: size
+        }}>
+          <View style={{
+            height: size,
+            width: size,
+            backgroundColor: backgroundColor,
+            borderRadius: size / 2,
+            justifyContent: 'center'
+          }}>
+            <Image style={{
+              height: size / 1.5,
+              width: size / 1.5,
+              alignSelf: 'center'
+            }} source={imageSource} />
+          </View>
+          <Text style={{
+            fontSize: 13,
+            marginTop: 8,
+            alignSelf: 'center'
+          }}>{this.props.name}</Text>
+        </View>
+      </TouchableOpacity>
+    )
+  }
 }
