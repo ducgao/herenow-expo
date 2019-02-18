@@ -79,7 +79,11 @@ export default class Search extends Component {
     const route = props.route
     const textColor = this.state.index == route.index ? 'white' : 'white'
     return (
-      <View style={{height: 50, justifyContent: 'center'}}>
+      <View style={{
+        height: 50, 
+        marginTop: isIphoneX ? 24 : 0,
+        justifyContent: 'center'
+      }}>
         <Text style={{color: textColor, fontSize: 12, textAlign: 'center'}} >{route.title}</Text>
       </View>
     )
@@ -88,7 +92,10 @@ export default class Search extends Component {
   _renderTabBar = (props) => {
     return <TabBar
       {...props}
-      style={{ backgroundColor: theme().primary_color, height: 50 }}
+      style={{ 
+        backgroundColor: theme().primary_color, 
+        height: 50 + (isIphoneX ? 24 : 0)
+      }}
       indicatorStyle={{ backgroundColor: theme().accent_color }}
       renderLabel={this._renderLabel}
     />
