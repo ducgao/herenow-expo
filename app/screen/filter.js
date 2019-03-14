@@ -4,14 +4,16 @@ import {
   Text, 
   View,
   Dimensions,
+  ScrollView,
+  ActivityIndicator,
   TouchableOpacity
 } from 'react-native'
-import FlowLayout from '../component/flowlayout'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import string from '../res/string'
 import { theme } from '../res/theme'
 import HNButton from '../component/hnButton'
 import DataRepository from '../repository/data-repository'
+import Category from '../component/category'
 
 export default class Favorite extends Component {
   static navigationOptions = { header: null }
@@ -41,6 +43,14 @@ export default class Favorite extends Component {
     const onFeedback = this.props.navigation.getParam("onFeedback")
     if (onFeedback) {
       onFeedback(selectedCategory)
+    }
+    this.props.navigation.goBack()
+  }
+
+  _onCategoryClick = (category) => {
+    const onFeedback = this.props.navigation.getParam("onFeedback")
+    if (onFeedback) {
+      onFeedback(category)
     }
     this.props.navigation.goBack()
   }
@@ -96,29 +106,97 @@ export default class Favorite extends Component {
     )
   }
 
-  render() {
-    const categoriesFilterData = this.dataRepository.getCategories().map((category) => 
-      category.name
+  _getIndexOfCategory(category) {
+    switch(category.name) {
+      case "Hotel": {
+        return 5
+      }
+      case "Food & Beverage": {
+        return 3
+      }
+      case "Local Event": {
+        return 2
+      }
+      case "Service": {
+        return 6
+      }
+      case "Shop": {
+        return 4
+      }
+      case "Tour": {
+        return 1
+      }
+      default: {
+        return 7
+      }
+    }
+  }
+
+  _renderCategories() {
+    const categories = this.dataRepository.getCategories().sort((a, b) => {
+      let indexA = this._getIndexOfCategory(a)
+      let indexB = this._getIndexOfCategory(b)
+
+      return indexA - indexB
+    }).map((category) => 
+      <Category 
+        style={{ marginRight: 16, marginBottom: 16 }} 
+        key={category.id} 
+        data={category}
+        name={category.name}
+        thumbnail={category.coverUrl}
+        onPress={this._onCategoryClick}
+         />
     )
+
+    const wrapCategories = []
+    for (let index = 0; index < categories.length; index += 2) {
+      const aRow = <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+        {categories[index]}
+        {index + 1 < categories.length ? categories[index + 1] : null}
+      </View>
+      wrapCategories.push(aRow)
+    }
+
+    const content = this.dataRepository.getCategories().length == 0 ?
+      <ActivityIndicator style={{ marginLeft: 16, alignSelf: 'flex-start' }} /> 
+      :
+      <ScrollView showsHorizontalScrollIndicator={false}>
+        <View style={{ marginLeft: 16 }}>
+          {wrapCategories}
+        </View>
+      </ScrollView>
+    return (
+      <View style={{
+        flex: 1,
+        paddingTop: 12,
+        width: WINDOW_WIDTH
+      }}>
+        {content}
+      </View>
+    )
+  }
+
+  render() {
     return (
       <View style={[styles.container, { backgroundColor: theme().app_background }]}>
         <Text style={{
-          marginTop: 80,
+          marginTop: 44,
           marginLeft: 16,
-          fontSize: 20,
+          fontSize: 24,
           fontWeight: 'bold'
         }}>{string.categories}</Text>
-        <FlowLayout
-          ref={ref => this.categoriesFilterComponent = ref}
-          style={{
-            paddingLeft: 16,
-            paddingRight: 16
-          }}
-          multiselect={false}
-          dataValue={categoriesFilterData}
-        />
+        {this._renderCategories()}
         {this._renderCloseButton()}
-        {this._renderCTA()}
+        <HNButton 
+          style={{ 
+            width: WINDOW_WIDTH - 32, 
+            marginTop: 12, 
+            marginBottom: 16,
+            marginLeft: 16
+          }} 
+          text={"Clear filter"} 
+          onPress={() => this._onCategoryClick(null)} />
       </View>
     );
   }

@@ -46,8 +46,13 @@ export default class Search extends Component {
   }
 
   onDataReady = () => {
-    const newCategories = this.dataRepository.getCategories()
-    // this._getMerchants()
+    const newCategories = this.dataRepository.getCategories().slice().sort((a, b) => {
+      let indexA = this._getIndexOfCategory(a)
+      let indexB = this._getIndexOfCategory(b)
+
+      return indexA - indexB
+    })
+    
     this.setState({ 
       categories: newCategories,
       searchResults: null,
@@ -55,6 +60,32 @@ export default class Search extends Component {
       inSearchWithCategory: null,
       inSearchWithKeywords: null
      })
+  }
+
+  _getIndexOfCategory(category) {
+    switch(category.name) {
+      case "Hotel": {
+        return 5
+      }
+      case "Food & Beverage": {
+        return 3
+      }
+      case "Local Event": {
+        return 2
+      }
+      case "Service": {
+        return 6
+      }
+      case "Shop": {
+        return 4
+      }
+      case "Tour": {
+        return 1
+      }
+      default: {
+        return 7
+      }
+    }
   }
 
   _getSearchParams = (name, category, merchant) => {

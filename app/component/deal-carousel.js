@@ -70,6 +70,7 @@ export default class DealCarousel extends Component {
     render() {
         const data = this.props.data
         const imageSource = data.coverPhotoUrl ? {uri: data.coverPhotoUrl} : null
+        const priceString = (data.price / 1000 + " VNĐ / ").replace(".", ",")
         return (
             <TouchableOpacity activeOpacity={0.7} onPress={() => this._onPress(data)}>
                 <Image style={{ 
@@ -103,7 +104,7 @@ export default class DealCarousel extends Component {
                         marginLeft: 8,
                         fontWeight: 'bold',
                         color: 'white'
-                    }}>{data.price / 1000 + " VNĐ / "}</Text>
+                    }}>{priceString}</Text>
                     <Text style={{
                         fontSize: 14,
                         marginTop: 8,

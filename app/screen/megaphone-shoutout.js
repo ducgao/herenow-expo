@@ -12,6 +12,7 @@ import Post from '../component/post'
 import string from '../res/string'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { theme } from '../res/theme'
+import UserRepository from '../repository/user-repository';
 
 export default class MGPShouout extends Component {
 
@@ -27,7 +28,7 @@ export default class MGPShouout extends Component {
 
   requestUpdateData = (force) => {
     if (this.state.posts == null || force) {
-      this.api.getPost('shoutout').then(data => {
+      this.api.getPosts('shoutout').then(data => {
         this.setState({
           dealsPagingInfo: {
             total: data.total,
@@ -126,26 +127,35 @@ export default class MGPShouout extends Component {
   }
 
   _renderCTA() {
-    const close = <TouchableOpacity style={{
-      position: 'absolute',
-      right: 20,
-      bottom: 12,
-      backgroundColor: theme().button_active,
-      height: 40,
-      width: 40,
-      borderRadius: 20,
-      elevation: 4,
-      justifyContent: 'center',
-      alignItems: 'center'
-    }} onPress={this._requestNewPost} activeOpacity={0.7}>
-      <Icon name='plus' color={'white'} size={20} />
-    </TouchableOpacity>
-
-    return [close]
+    if (UserRepository.instance().isLogged()) {
+      const close = <TouchableOpacity style={{
+        position: 'absolute',
+        right: 20,
+        bottom: 12,
+        backgroundColor: theme().button_active,
+        height: 40,
+        width: 40,
+        borderRadius: 20,
+        elevation: 4,
+        justifyContent: 'center',
+        alignItems: 'center'
+      }} onPress={this._requestNewPost} activeOpacity={0.7}>
+        <Icon name='plus' color={'white'} size={20} />
+      </TouchableOpacity>
+  
+      return [close]
+    }
   }
 
   _requestNewPost = () => {
-    this.props.navigation.navigate('PostCreator')
+    this.props.navigation.navigate('PostCreator', { 
+      type: "shoutout",
+      callback: this._requestReload
+    })
+  }
+
+  _requestReload = () => {
+    this.requestUpdateData(true)
   }
 
   _onRefresh = () => {
@@ -164,7 +174,7 @@ export default class MGPShouout extends Component {
   }
 
   _loadMore = (page) => {
-    this.api.getPost('shoutout', page).then(data => {
+    this.api.getPosts('shoutout', page).then(data => {
       var newPosts = this.state.posts
       data.data.forEach(i => newPosts.push(i))
       this.setState({

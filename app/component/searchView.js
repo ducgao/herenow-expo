@@ -20,6 +20,17 @@ export default class SearchView extends Component {
         this.props.onSearch(this.state.text)
     }
 
+    _renderFilterIcon() {
+      if (this.props.renderFilterIcon) {
+        return <Icon style={{
+          alignSelf: 'center'    
+          }} 
+          onPress={this.props.onFilterClick}
+          name={'sliders'} color={theme().inactive_color} size={20} 
+        />
+      }
+    }
+
     render() {
         return (
         <View style={[{
@@ -42,11 +53,7 @@ export default class SearchView extends Component {
             onSubmitEditing={this._onSubmitEditing}
             secureTextEntry={this.props.secureTextEntry}
             />
-            <Icon style={{
-                alignSelf: 'center'    
-            }} 
-            onPress={this.props.onFilterClick}
-            name={'sliders'} color={theme().inactive_color} size={20} />
+            { this._renderFilterIcon() }
         </View>
         )
     }

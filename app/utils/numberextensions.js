@@ -1,7 +1,7 @@
-Number.prototype.formatMoney = function(c = 0, d = '.', t = '.'){
+Number.prototype.formatMoney = function(c = 0, d = ',', t = '.'){
     var n = this, 
     cc = isNaN(c = Math.abs(c)) ? 2 : c, 
-    dd = d == undefined ? "." : d, 
+    dd = d == undefined ? "," : d, 
     tt = t == undefined ? "," : t, 
     s = n < 0 ? "-" : "", 
     i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 

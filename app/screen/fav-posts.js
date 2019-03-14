@@ -49,7 +49,10 @@ export default class SavedPost extends Component {
   }
 
   _onPostClick = (post) => {
-    this.props.navigation.navigate("PostDetail", { post })
+    this.api.getPost(post.id).then(res => {
+      const p = res.data[0]
+      this.props.navigation.navigate("PostDetail", { post: p })
+    })
   }
 
   _renderSlogan() {
@@ -92,7 +95,7 @@ export default class SavedPost extends Component {
       return <Post 
         key={position}
         data={value.post}
-        enableSaveButton={true}
+        enableSaveButton={false}
         onPress={this._onPostClick}
       />
     })

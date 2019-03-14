@@ -36,14 +36,14 @@ export default class Cart extends Component {
     const buttonWidth = WINDOW_WIDTH - 16 * 2
     const process = <HNButton 
       key='cart-paypal-button' 
-      style={{ width: buttonWidth, backgroundColor: 'white' }} 
+      style={{ width: buttonWidth, backgroundColor: 'white', marginTop: 32 }} 
       textColor='black' 
-      text={string.submit}
+      text={string.next}
       onPress={this._resetFilter} />
     const cancel = <HNButton 
       key='cart-credit-card-button' 
       style={{ width: buttonWidth, marginTop: 12 }} 
-      text={string.cancel} 
+      text={string.back} 
       onPress={this._onBack} />
 
     return [process, cancel]
@@ -55,17 +55,17 @@ export default class Cart extends Component {
     return <View style={{ width: 150, marginLeft: 16, flexDirection: 'row' }}>
       <TouchableOpacity style={{ 
         backgroundColor: minusColor, 
-        width: 20, 
-        height: 20, 
+        width: 32, 
+        height: 32, 
         justifyContent: 'center' 
       }} onPress={() => { if (quantity > 1) this.setState({ quantity: quantity - 1})}}>
         <Icon name="minus" size={10} style={{ alignSelf: 'center' }} color='white' />
       </TouchableOpacity>
-      <Text style={{ fontSize: 12, paddingLeft: 8, paddingRight: 8, marginTop: 3 }} >{this.state.quantity}</Text>
+      <Text style={{ fontSize: 16, paddingLeft: 12, paddingRight: 12, marginTop: 4 }} >{this.state.quantity}</Text>
       <TouchableOpacity style={{ 
         backgroundColor: theme().primary_color, 
-        width: 20, 
-        height: 20, 
+        width: 32, 
+        height: 32, 
         justifyContent: 'center' 
       }} onPress={() => this.setState({ quantity: quantity + 1})}>
         <Icon name="plus" size={10} style={{ alignSelf: 'center' }} color='white'/>
@@ -109,13 +109,13 @@ export default class Cart extends Component {
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 8 }}>
                   {this._renderQuantitySelect()}
-                  <Text style={{ marginLeft: 16, marginTop: 3, width: 100, height: 20, fontSize: 12 }} >{total}</Text>
+                  <Text style={{ marginLeft: 16, marginTop: 4, width: 200, height: 20, fontSize: 16 }} >{total}</Text>
                 </View>
               </View>
             </View>
-            <View style={{ height: 300, marginTop: 16 }}>
+            {/* <View style={{ height: 300, marginTop: 16 }}>
               <CreditCardInput labelStyle={{ color: theme().text_color }} />
-            </View>
+            </View> */}
             <View style={{ paddingLeft: 16  }}>
               {this._renderCTA()}  
             </View>

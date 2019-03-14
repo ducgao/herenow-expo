@@ -19,6 +19,7 @@ import DataRepository from '../repository/data-repository'
 import { theme } from '../res/theme'
 import UserRepository from '../repository/user-repository'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import Icon2 from 'react-native-vector-icons/FontAwesome'
 import Api from '../api'
 
 export default class Home extends Component {
@@ -138,7 +139,13 @@ export default class Home extends Component {
   }
 
   _onProviderClick = (provider) => {
-    this.props.navigation.navigate('ProviderDetail', { provider: provider.provider })
+    const mainContent = provider.provider
+    const _provider = {
+      isSaved: provider.isSaved,
+      ...mainContent
+    }
+
+    this.props.navigation.navigate('ProviderDetail', { provider: _provider })
   }
 
   _onRequestChangeLocation = () => {
@@ -303,9 +310,9 @@ export default class Home extends Component {
             fontWeight: '400',
             color: theme().primary_color
           }} >{this.state.dealFilter ? (" (" + this.state.dealFilter.name + ")") : ""}</Text>
-          <Icon 
-            style={{ position: 'absolute', right: 16, top: 4 }} 
-            name="filter" size={14} 
+          <Icon2
+            style={{ position: 'absolute', right: 16 }} 
+            name="sliders" size={24} 
             color={theme().primary_color} 
             onPress={this._requestFilterDeals}
           />

@@ -20,10 +20,8 @@ import ImagePicker from 'react-native-image-picker'
 export default class SignUp extends Component {
   static navigationOptions = { header: null }
 
-  fnameTextInput = null
-  lnameTextInput = null
-  emailTextInput = null
-  passwordTextInput = null
+  titleTextInput = null
+  contentTextInput = null
 
   state = {
     showTag: null,
@@ -31,6 +29,14 @@ export default class SignUp extends Component {
   }
 
   api = Api.instance()
+  imagesObjectToUpload = []
+  createType = null
+
+  constructor(props) {
+    super(props)
+
+    this.createType = props.navigation.getParam("type")
+  }
 
   _requestOpenImagePicker = () => {
     const options = {
@@ -51,6 +57,12 @@ export default class SignUp extends Component {
         return
       }
 
+      this.imagesObjectToUpload.push({
+        uri: response.uri,
+        type: response.type,
+        name: response.fileName
+      })
+
       const currentImages = this.state.images.slice()
       currentImages.push(response)
       this.setState({
@@ -59,16 +71,84 @@ export default class SignUp extends Component {
     })
   }
 
+  _requestCreatePost = () => {
+    const title = this.titleTextInput.getText()
+    const content = this.contentTextInput.getText()
+    const images = this.state.images
+
+    if (title == null) {
+      alert(string.create_post_missing_title)
+      return
+    }
+
+    if (content == null) {
+      alert(string.create_post_missing_content)
+      return
+    } 
+
+    // if (images.length == 0) {
+    //   alert(string.create_post_missing_images)
+    //   return
+    // }
+
+    this.setState({
+      showTag: SHOW_LOADING
+    }, () => {
+      this._uploadImages().then(imgs => {
+        this.api.createPost(this.createType, title, content, imgs).then(() => {
+          this.setState({ showTag: null }, () => {
+            this.props.navigation.goBack()
+            const requetsCallback = this.props.navigation.getParam("callback")
+            if (requetsCallback) {
+              requetsCallback()
+            }
+          })
+        })
+        .catch(e => {
+          this.setState({ showTag: null }, () => {
+            setTimeout(() => { alert(e) }, 500)
+          })
+        })
+      })
+    })
+  }
+
+  _uploadImages() {
+    const imagesToUpload = this.imagesObjectToUpload.slice()
+    return new Promise((resolve, rejecter) => {
+      this._uploadImage(imagesToUpload, resolve, rejecter, [])
+    }) 
+  }
+
+  _uploadImage(images, resolve, rejecter, result) {
+    if (images.length == 0) {
+      resolve(result)
+      return
+    }
+
+    const img = images.pop()
+    this.api.uploadImage(img).then(res => {
+      result.push({
+        url: res.url,
+			  type: "image"
+      })
+      this._uploadImage(images, resolve, rejecter, result)
+    })
+    .catch(e => {
+      rejecter(e)
+    })
+  }
+
   _renderBasicInput() {
     const title = <HNTextInput 
-      ref={ref => this.fnameTextInput = ref}
+      ref={ref => this.titleTextInput = ref}
       style={{marginTop: 30}}
       title={string.post_title}
       placeholder={string.post_title_place_holder}
     />
 
     const content = <HNTextInput 
-      ref={ref => this.lnameTextInput = ref}
+      ref={ref => this.contentTextInput = ref}
       style={{marginTop: 30}}
       autoGrow={true}
       title={string.post_content}
@@ -142,7 +222,7 @@ export default class SignUp extends Component {
     return <HNButton 
       style={{marginTop: 40}}
       text={string.submit}
-      onPress={this._onSignUp}
+      onPress={this._requestCreatePost}
     />
   }
 

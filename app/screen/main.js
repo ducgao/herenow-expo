@@ -128,6 +128,7 @@ export default class Main extends Component {
     if (this.userRepository.isLogged()) {
       this.walletRef.onDataUpdating()
       this.api.getWallet().then(wallet => {
+        alert(JSON.stringify(wallet))
         if (Array.isArray(wallet.deals)) {
           this.dataRepository.setWallet(wallet.deals)
         }

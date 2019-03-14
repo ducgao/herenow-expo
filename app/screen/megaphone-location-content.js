@@ -10,6 +10,7 @@ import Api from '../api'
 import Post from '../component/post'
 import string from '../res/string'
 import { theme } from '../res/theme'
+import { ACCESS_TOKEN_SAVE_KEY } from '../repository/user-repository';
 
 export default class MGPLocationContent extends Component {
 
@@ -25,7 +26,7 @@ export default class MGPLocationContent extends Component {
 
   requestUpdateData = (force) => {
     if (this.state.posts == null || force) {
-      this.api.getPost('herenow').then(data => {
+      this.api.getPosts('herenow').then(data => {
         this.setState({
           dealsPagingInfo: {
             total: data.total,
@@ -140,7 +141,7 @@ export default class MGPLocationContent extends Component {
   }
 
   _loadMore = (page) => {
-    this.api.getPost('herenow', page).then(data => {
+    this.api.getPosts('herenow', page).then(data => {
       var newPosts = this.state.posts
       data.data.forEach(i => newPosts.push(i))
       this.setState({

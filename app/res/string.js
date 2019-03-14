@@ -81,8 +81,8 @@ export default strings = {
     post_content: "Content",
     post_content_place_holder: "Fill the content",
     tap_to_change: "Change location",
-    book_now: "Buy Now",
-    price_title: "from VNĐ",
+    book_now: "Buy now",
+    price_title: "VNĐ",
     overview: "Overview",
     change_to_dark_mode: "Change to dark mode",
     change_dark_mode_confirm_title: "Using Dark Mode",
@@ -99,5 +99,10 @@ export default strings = {
     deals: "Deals",
     location_content_slogan: "Find travel insights, breaking news, and things to do in this location. Remember to save it for later!",
     shout_out_slogan: "Ask a question, share a cool discovery, find a travel partner, join a party — or simply tell us what’s up!",
-    buy_sell_slogan: "Motorbikes, adaptors, travel gear, currency exchange — everything you need for your adventure."
+    buy_sell_slogan: "Motorbikes, adaptors, travel gear, currency exchange — everything you need for your adventure.",
+    create_post_missing_title: "You are missing your post's title",
+    create_post_missing_content: "You are missing your post's content",
+    create_post_missing_images: "Atleast 1 image is required for your post",
+    next: "Next",
+    back: "Back"
 }

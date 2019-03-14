@@ -6,6 +6,7 @@ import {
   View,
   Text,
   Image,
+  Alert,
   TouchableOpacity
 } from 'react-native'
 import { theme } from '../res/theme'
@@ -28,12 +29,18 @@ export default class ProviderDetail extends Component {
   state = {
     provider: null,
     address: string.fetching,
-    deals: null
+    deals: null,
+    isLoved: false
   }
 
   componentWillMount() {
     const provider = this.props.navigation.getParam("provider")
-    this.setState({ provider })
+    const { isSaved } = provider
+    const isLoved = isSaved ? isSaved.count > 0 : false
+    this.setState({ 
+      provider,
+      isLoved
+    })
 
     this.api.getAddressInfo(provider.addressId).then(info => {
       const address = 
@@ -53,6 +60,23 @@ export default class ProviderDetail extends Component {
 
   _displayValue(input, isLast) {
     return input ? isLast ? input : (input + ", ") : ""
+  }
+
+  _addToWishList = () => {
+    if (this.state.isLoved) { return }
+    this.api.saveProvider(this.state.provider.id).then(res => {
+      if (res.code) {
+        Alert.alert("Herenow", "Can not save provider, please try again later!")
+      } else {
+        Alert.alert("Herenow", "Provider successfully saved!")
+        this.setState({
+          isLoved: true
+        })
+      }
+    })
+    .catch(e => {
+      Alert.alert("Herenow", "Can not save provider, please try again later!")
+    })
   }
 
   _onBack = () => {
@@ -228,21 +252,28 @@ export default class ProviderDetail extends Component {
   }
 
   _renderFavorite() {
-    return <Icon style={{
+    return <View style={{
+      overflow: 'hidden',
       position: 'absolute',
       top: WINDOW_WIDTH / 1.5 - 22,
       right: 16,
-      borderRadius: 22,
       width: 44, height: 44,
-      backgroundColor: theme().inactive_color,
-      paddingTop: 12,
-      paddingLeft: 12
-    }}
-    name={'tag'}
-    size={20}
-    color={'white'}
-    onPress={() => alert("add to wish list")}
-  />
+      borderRadius: 22,
+      backgroundColor: this.state.isLoved ? theme().accent_color : theme().inactive_color
+    }}>
+      <Icon style={{
+        borderRadius: 22,
+        width: 44, height: 44,
+        backgroundColor: this.state.isLoved ? theme().accent_color : theme().inactive_color,
+        paddingTop: 12,
+        paddingLeft: 12
+      }}
+      name={'tag'}
+      size={20}
+      color={'white'}
+      onPress={this._addToWishList}
+    />
+      </View>
   }
 
   render() {

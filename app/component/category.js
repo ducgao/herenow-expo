@@ -61,18 +61,20 @@ export default class Category extends Component {
     return (
       <TouchableOpacity style={this.props.style} activeOpacity={0.7} onPress={this._onPress}>
         <View style={{
-            width: size
+            width: size,
+            justifyContent: 'center'
         }}>
           <View style={{
-            height: size,
-            width: size,
+            height: size / 1.5,
+            width: size / 1.5,
+            alignSelf: 'center',
             backgroundColor: backgroundColor,
             borderRadius: size / 2,
             justifyContent: 'center'
           }}>
             <Image style={{
-              height: size / 1.5,
-              width: size / 1.5,
+              height: size / 2.5,
+              width: size / 2.5,
               alignSelf: 'center'
             }} source={imageSource} />
           </View>

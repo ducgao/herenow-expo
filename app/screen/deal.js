@@ -168,6 +168,7 @@ export default class Deal extends Component {
       <SearchView 
         style={{ position: 'absolute', width: WINDOW_WIDTH - 16 * 2 }} 
         onFilterClick={this._onFilterClick}
+        renderFilterIcon={true}
       />
       <TouchableOpacity style={{ 
         width: WINDOW_WIDTH - 16 * 2,

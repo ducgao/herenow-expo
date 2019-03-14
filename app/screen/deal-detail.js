@@ -16,6 +16,7 @@ import Api from '../api'
 import { formatDateTime } from '../utils'
 import Carousel from 'react-native-snap-carousel'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import UserRepository from '../repository/user-repository'
 
 export const PAYMENT_METHOD_PAYPAL = "paypal"
 export const PAYMENT_METHOD_CREDIT_CARD = "credit-card"
@@ -24,6 +25,7 @@ export default class DealDetail extends Component {
   static navigationOptions = { header: null }
 
   api = Api.instance()
+  userRepository = UserRepository.instance()
 
   merchant = null
 
@@ -121,6 +123,12 @@ export default class DealDetail extends Component {
    * allow credit card only 
    */
   _addCart = () => {
+    if (this.userRepository.isLogged()) {
+      this._processWith(PAYMENT_METHOD_CREDIT_CARD)
+    }
+    else {
+      alert("You must login to buy a deal")
+    }
     // Alert.alert(
     //   this.state.deal.deal.name,
     //   string.purchase_method_message,
@@ -131,7 +139,6 @@ export default class DealDetail extends Component {
     //   ],
     //   { cancelable: true }
     // )
-    this._processWith(PAYMENT_METHOD_CREDIT_CARD)
   }
 
   _openGallery = (index) => {
@@ -223,7 +230,7 @@ export default class DealDetail extends Component {
     const deal = this.state.deal.deal
     if (deal) {
       const firstPrice = Number.parseInt(deal.price / 1000)
-      const secondPrice = '.' + Number.parseInt(deal.price % 1000)
+      const secondPrice = ',' + Number.parseInt(deal.price % 1000)
 
       return (
         <View style={{ flexDirection: 'row' }}>
@@ -253,7 +260,7 @@ export default class DealDetail extends Component {
               <Text style={{ 
                 color: theme().primary_color,
                 fontWeight: 'bold',
-                fontSize: 48
+                fontSize: 20
                }}>{firstPrice}</Text>
                <Text style={{ 
                 color: theme().primary_color,
@@ -276,7 +283,7 @@ export default class DealDetail extends Component {
     }
 
     const discount = deal.discountAmount + '%'
-    const original = Number.parseInt(deal.listPrice / 1000) + "K"
+    const original = deal.listPrice.formatMoney()
 
     const separator = <View style={{ height: 1, backgroundColor: theme().separator_color }} />
     const content = <View style={{ flexDirection: 'row' }}>

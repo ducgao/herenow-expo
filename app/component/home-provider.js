@@ -3,7 +3,8 @@ import {
   View, 
   Image,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from 'react-native'
 import { LinearGradient } from 'expo'
 import { theme } from '../res/theme'
@@ -18,14 +19,15 @@ export default class Category extends Component {
     render() {
         const data = this.props.data.provider
         const imageSource = data.coverPhotoUrl ? {uri: data.coverPhotoUrl} : null
+        const itemWidth = this.props.fullSize ? (Dimensions.get('window').width - 32) : 200
         return (
             <TouchableOpacity style={this.props.style} activeOpacity={0.7} onPress={this._onPress}>
                 <View style={{
-                    width: 200
+                    width: itemWidth
                 }}>
                     <Image style={{
                         height: 140,
-                        width: 200,
+                        width: itemWidth,
                         borderRadius: 8,
                         backgroundColor: theme().image_background
                         }} source={imageSource} />
