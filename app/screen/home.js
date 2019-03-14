@@ -20,7 +20,6 @@ import { theme } from '../res/theme'
 import UserRepository from '../repository/user-repository'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import Api from '../api'
-import { isIphoneX } from '../utils';
 
 export default class Home extends Component {
   static navigationOptions = { header: null }
@@ -48,7 +47,9 @@ export default class Home extends Component {
       const longitude = location.coords.longitude
       this.api.getLocations().then(locations => {
         this.dataRepository.setLocations(locations.data)
-        this._onDataReady(latitude, longitude)
+        // this._onDataReady(latitude, longitude)
+        // TODO: just for workaround
+        this._onDataReady(10.762622, 106.660172)
       })
     })
   }
@@ -164,13 +165,13 @@ export default class Home extends Component {
       <TouchableOpacity activeOpacity={0.7} onPress={this._onRequestChangeLocation}>
         <Image style={{
           width: WINDOW_WIDTH,
-          height: (WINDOW_WIDTH / 2.2) + (isIphoneX ? 24 : 0)
+          height: WINDOW_WIDTH / 2.2
         }} resizeMode='cover' source={locationCover} />
         <Image
           style={{
             position: 'absolute',
             width: 80,
-            top: 20 + (isIphoneX ? 24 : 0),
+            top: 20,
             left: 16,
             resizeMode: 'contain'
           }}

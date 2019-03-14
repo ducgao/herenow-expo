@@ -58,10 +58,8 @@ export default class UserRepository {
 
     setAccessToken = (token) => {
         this._accessToken = token
-        if (token) {
-          Api.instance().setAccessToken(token)
-          AsyncStorage.setItem(ACCESS_TOKEN_SAVE_KEY, token)
-        }
+        Api.instance().setAccessToken(token)
+        AsyncStorage.setItem(ACCESS_TOKEN_SAVE_KEY, token)
     }
 
     setUserData = (userData) => {
