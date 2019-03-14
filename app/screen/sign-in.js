@@ -12,8 +12,8 @@ import { theme } from '../res/theme'
 import HNTextInput from '../component/hnTextInput'
 import HNButton from '../component/hnButton'
 import Api from '../api'
-import { LoginManager, GraphRequest, GraphRequestManager } from 'react-native-fbsdk'
-import GoogleSignIn from 'react-native-google-sign-in'
+// import { LoginManager, GraphRequest, GraphRequestManager } from 'react-native-fbsdk'
+// import GoogleSignIn from 'react-native-google-sign-in'
 import { SHOW_LOADING, DialogCombine } from '../component/dialogCombine'
 
 export default class SignIn extends Component {
